@@ -38,7 +38,7 @@ jobs:
           name: Build application Docker image
           command: |
             docker version
-            docker build --build-arg VERSION=$(jq -r '.version' malice/package.json) --cache-from=app -t app .
+            docker build --cache-from=app -t app .
       - run:
           name: Get Docker image size
           command: |
