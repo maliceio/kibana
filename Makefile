@@ -1,15 +1,15 @@
 REPO=maliceio/kibana
 ORG=malice
 NAME=kibana
-BUILD ?= 5.5
-LATEST ?= 5.5
+BUILD ?=$(shell cat LATEST)
+LATEST ?=$(shell cat LATEST)
 
 all: build size test
 
-build:
+build: ## Build docker image
 	cd $(BUILD); docker build -t $(ORG)/$(NAME):$(BUILD) .
 
-size: build
+size: build ## Get built image size
 ifeq "$(BUILD)" "$(LATEST)"
 	sed -i.bu 's/docker%20image-.*-blue/docker%20image-$(shell docker images --format "{{.Size}}" $(ORG)/$(NAME):$(BUILD)| cut -d' ' -f1)-blue/' README.md
 	sed -i.bu '/latest/ s/[0-9.]\{3,5\}MB/$(shell docker images --format "{{.Size}}" $(ORG)/$(NAME):$(BUILD))/' README.md
@@ -19,10 +19,10 @@ endif
 tags:
 	docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" $(ORG)/$(NAME)
 
-test:
+test: ## Test docker image
 	docker run --rm $(ORG)/$(NAME):$(BUILD)
 
-run:
+run: ## Run docker immage
 	docker run -d --name krun --link esrun:elasticsearch -p 5601:5601 $(ORG)/$(NAME):$(BUILD)
 
 ssh: ## SSH into docker image
