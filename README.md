@@ -1,11 +1,15 @@
-![kibana-logo](https://raw.githubusercontent.com/maliceio/kibana/master/kibana-logo.png)
+![kibana-logo](https://raw.githubusercontent.com/maliceio/kibana/master/docs/kibana-logo.png)
 
 malice-kibana
 =============
 
 [![CircleCI](https://circleci.com/gh/maliceio/kibana.png?style=shield)](https://circleci.com/gh/maliceio/kibana) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Docker Stars](https://img.shields.io/docker/stars/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Pulls](https://img.shields.io/docker/pulls/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Image](https://img.shields.io/badge/docker%20image-202MB-blue.svg)](https://hub.docker.com/r/malice/kibana/)
 
-Malice's Custom [Kibana](https://www.elastic.co/products/kibana) Docker Image
+> Malice's Custom [Kibana](https://www.elastic.co/products/kibana) Docker Image
+
+![screen-shot](https://raw.githubusercontent.com/maliceio/kibana/master/docs/screen-shot.png)
+
+---
 
 **Table of Contents**
 
