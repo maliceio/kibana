@@ -49,7 +49,8 @@ RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
   && apk del --purge .build-deps
 
 # Install Malice  plugin
-RUN kibana-plugin install https://github.com/maliceio/malice-kibana-plugin/releases/download/$KIBANA_VERSION/malice-$KIBANA_VERSION.zip
+RUN kibana-plugin install \
+  https://github.com/malice-plugins/kibana-plugin-builder/releases/download/v$KIBANA_VERSION/malice-$KIBANA_VERSION.zip
 
 COPY docker-entrypoint.sh /
 
