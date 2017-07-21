@@ -35,8 +35,9 @@ jobs:
             set +o pipefail
             docker load -i /caches/app.tar | true
       - run:
-          name: Build application Docker image
+          name: Build kibana Docker image
           command: |
+            ls -lah
             docker version
             docker build --cache-from=app -t app .
       - run:
@@ -56,7 +57,7 @@ jobs:
           paths:
             - /caches/app.tar
       - run:
-          name: Run malware test
+          name: Run kibana test
           command: |
             set -x
             echo "make tests"
