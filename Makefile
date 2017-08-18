@@ -1,3 +1,5 @@
+.PHONY: build size tags test tar push run ssh stop circle
+
 REPO=maliceio/kibana
 ORG=malice
 NAME=kibana
@@ -19,17 +21,27 @@ endif
 tags:
 	docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" $(ORG)/$(NAME)
 
-test: ## Test docker image
-	docker run --rm $(ORG)/$(NAME):$(BUILD)
-
-run: ## Run docker immage
-	docker run -d --name krun --link esrun:elasticsearch -p 5601:5601 $(ORG)/$(NAME):$(BUILD)
-
-ssh: ## SSH into docker image
-	@docker run --init -it --rm -v `pwd`:/home/kibana --entrypoint=sh $(ORG)/$(NAME):$(VERSION)
+test: stop ## Test docker image
+	@docker run --init -d --name elasticsearch -p 9200:9200 blacktop/elasticsearch:$(BUILD); sleep 10;
+	@docker run --init -d --name $(NAME) --link elasticsearch -p 5601:5601 $(ORG)/$(NAME):$(BUILD)
+	@docker logs $(NAME)
 
 tar: ## Export tar of docker image
-	docker save $(ORG)/$(NAME):$(VERSION) -o $(NAME).tar
+	docker save $(ORG)/$(NAME):$(BUILD) -o $(NAME).tar
+
+push: build ## Push docker image to docker registry
+	@echo "===> Pushing $(ORG)/$(NAME):$(BUILD) to docker hub..."
+	@docker push $(ORG)/$(NAME):$(BUILD)
+
+run: stop ## Run docker container
+	@docker run --init -d --name $(NAME) -p 5601:5601 $(ORG)/$(NAME):$(BUILD)
+
+ssh: ## SSH into docker image
+	@docker run --init -it --rm --entrypoint=sh $(ORG)/$(NAME):$(BUILD)
+
+stop: ## Kill running malice-engine docker containers
+	@docker rm -f $(NAME) || true
+	@docker rm -f elasticsearch || true
 
 circle: ci-size ## Get docker image size from CircleCI
 	@sed -i.bu 's/docker%20image-.*-blue/docker%20image-$(shell cat .circleci/SIZE)-blue/' README.md
@@ -45,7 +57,7 @@ ci-size: ci-build
 
 clean: ## Clean docker image and stop all running containers
 	docker-clean stop
-	docker rmi $(ORG)/$(NAME):$(VERSION) || true
+	docker rmi $(ORG)/$(NAME):$(BUILD) || true
 	rm -rf malice/build
 
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
@@ -53,5 +65,3 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
-
-.PHONY: build size tags tar test run ssh circle push release

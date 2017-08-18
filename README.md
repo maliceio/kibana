@@ -39,8 +39,8 @@ malice/kibana     5.5                 203MB
 ### Getting Started
 
 ```bash
-$ docker run -d --name elasticsearch -p 9200:9200 malice/elasticsearch
-$ docker run -d --name kibana --link elasticsearch -p 5601:5601 malice/kibana
+$ docker run --init -d --name elasticsearch -p 9200:9200 malice/elasticsearch
+$ docker run --init -d --name kibana --link elasticsearch -p 5601:5601 malice/kibana
 ```
 
 ### Documentation
@@ -48,13 +48,13 @@ $ docker run -d --name kibana --link elasticsearch -p 5601:5601 malice/kibana
 #### To use your own elasticsearch address via `ELASTICSEARCH_URL`
 
 ```bash
-$ docker run -d --name kibana -e ELASTICSEARCH_URL=http://some-elasticsearch:9200 -p 5601:5601 malice/kibana
+$ docker run --init -d --name kibana -e ELASTICSEARCH_URL=http://some-elasticsearch:9200 -p 5601:5601 malice/kibana
 ```
 
 For elasticsearch running on a OSX host it would be
 
 ```bash
-$ docker run -d --name kibana \
+$ docker run --init -d --name kibana \
   -p 5601:5601 \
   --net host \
   -e ELASTICSEARCH_URL="http://$(ipconfig getifaddr en0):9200" \
@@ -64,7 +64,7 @@ $ docker run -d --name kibana \
 =OR=
 
 ```bash
-$ docker run -d --name kibana \
+$ docker run --init -d --name kibana \
   -p 5601:5601 \
   --net host \
   -e ELASTICSEARCH_URL=http://localhost:9200 \
