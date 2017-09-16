@@ -32,6 +32,7 @@ malice-kibana
 ```bash
 REPOSITORY        TAG                 SIZE
 malice/kibana     latest              203MB
+malice/kibana     5.6                 203MB
 malice/kibana     5.5                 203MB
 ```
 
