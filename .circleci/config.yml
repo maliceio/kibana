@@ -3,15 +3,11 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.06.0-ce-git
+      - image: docker:17.07.0-ce-git
     steps:
       - checkout
       - setup_remote_docker:
-          version: 17.06.0-ce
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache jq
+          version: 17.07.0-ce
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
@@ -53,13 +49,3 @@ jobs:
           name: Run test
           command: |
             docker run --rm --network container:kibana blacktop/httpie GET http://localhost:5601
-
-      # - deploy:
-      #     name: Push application Docker image
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "master" ]; then
-      #         login="$(aws ecr get-login)"
-      #         ${login}
-      #         docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-      #         docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-      #       fi
