@@ -2,13 +2,13 @@
 
 # malice-kibana
 
-[![CircleCI](https://circleci.com/gh/maliceio/kibana.png?style=shield)](https://circleci.com/gh/maliceio/kibana) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Docker Stars](https://img.shields.io/docker/stars/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Pulls](https://img.shields.io/docker/pulls/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Image](https://img.shields.io/badge/docker%20image-203MB-blue.svg)](https://hub.docker.com/r/malice/kibana/)
+[![CircleCI](https://circleci.com/gh/maliceio/kibana.png?style=shield)](https://circleci.com/gh/maliceio/kibana) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Docker Stars](https://img.shields.io/docker/stars/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Pulls](https://img.shields.io/docker/pulls/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Image](https://img.shields.io/badge/docker%20image-316MB-blue.svg)](https://hub.docker.com/r/malice/kibana/)
 
 > Malice's Custom [Kibana](https://www.elastic.co/products/kibana) Docker Image
 
 ![screen-shot](https://raw.githubusercontent.com/maliceio/kibana/master/docs/screen-shot.png)
 
---------------------------------------------------------------------------------
+---
 
 **Table of Contents**
 
@@ -24,13 +24,14 @@
 
 ## Dependencies
 
-- [alpine:3.6](https://index.docker.io/_/gliderlabs/alpine/)
+- [alpine:3.8](https://index.docker.io/_/gliderlabs/alpine/)
 
 ## Image Tags
 
 ```bash
 REPOSITORY        TAG                 SIZE
-malice/kibana     latest              203MB
+malice/kibana     latest              316MB
+malice/kibana     6.3                 316MB
 malice/kibana     5.6                 203MB
 malice/kibana     5.5                 203MB
 ```
@@ -86,4 +87,4 @@ Please update the [CHANGELOG.md](https://github.com/maliceio/kibana/blob/master/
 
 ## License
 
-MIT Copyright (c) 2016-2017 **blacktop**
+MIT Copyright (c) 2016 **blacktop**
