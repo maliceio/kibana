@@ -1,36 +1,37 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 LABEL maintainer "https://github.com/blacktop"
 
-ENV KIBANA_VERSION 5.6.11
-
-ENV DOWNLOAD_URL "https://artifacts.elastic.co/downloads/kibana"
-ENV TARBAL "${DOWNLOAD_URL}/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz"
-ENV TARBALL_ASC "${DOWNLOAD_URL}/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz.asc"
-ENV SHA1_URL "${DOWNLOAD_URL}/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz.sha1"
+ENV VERSION 6.4.0
+ENV DOWNLOAD_URL https://artifacts.elastic.co/downloads/kibana
+ENV TARBAL "${DOWNLOAD_URL}/kibana-oss-${VERSION}-linux-x86_64.tar.gz"
+ENV TARBALL_ASC "${DOWNLOAD_URL}/kibana-oss-${VERSION}-linux-x86_64.tar.gz.asc"
+ENV TARBALL_SHA "eec78bb1935fdc126f7c69ea08c0997abc74f435f5ca24aa6fa370ad201dd1ebe9ab1d177f64ec66652a3c9c0dd3f13a8fa7866697d3f201f8bc124c051ebeba"
 ENV GPG_KEY "46095ACC8548582C1A2699A9D27D666CD88E42B4"
 
 ENV PATH /usr/share/kibana/bin:$PATH
 
 RUN apk add --no-cache bash nodejs su-exec
 RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
+  && set -ex \
   && cd /tmp \
   && echo "===> Install Kibana..." \
-  && EXPECTED_SHA=$(wget --progress=bar:force -O - ${SHA1_URL}) \
   && wget --progress=bar:force -O kibana.tar.gz "$TARBAL"; \
-  if [ "$EXPECTED_SHA" ]; then \
-  echo "$EXPECTED_SHA *kibana.tar.gz" | sha1sum -c -; \
+  if [ "$TARBALL_SHA" ]; then \
+  echo "$TARBALL_SHA *kibana.tar.gz" | sha512sum -c -; \
   fi; \
   if [ "$TARBALL_ASC" ]; then \
   wget --progress=bar:force -O kibana.tar.gz.asc "$TARBALL_ASC"; \
   export GNUPGHOME="$(mktemp -d)"; \
-  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY"; \
+  ( gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+  || gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" \
+  || gpg --keyserver keyserver.pgp.com --recv-keys "$GPG_KEY" ); \
   gpg --batch --verify kibana.tar.gz.asc kibana.tar.gz; \
-  rm -r "$GNUPGHOME" kibana.tar.gz.asc; \
+  rm -rf "$GNUPGHOME" kibana.tar.gz.asc || true; \
   fi; \
   tar -xf kibana.tar.gz \
   && ls -lah \
-  && mv kibana-$KIBANA_VERSION-linux-x86_64 /usr/share/kibana \
+  && mv kibana-$VERSION-linux-x86_64 /usr/share/kibana \
   && adduser -DH -s /sbin/nologin kibana \
   # the default "server.host" is "localhost" in 5+
   && sed -ri "s!^(\#\s*)?(server\.host:).*!\2 '0.0.0.0'!" /usr/share/kibana/config/kibana.yml \
@@ -50,7 +51,7 @@ RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
 
 RUN echo "===> Install Kibana Plugin..." \
   && kibana-plugin install \
-  https://github.com/maliceio/malice-kibana-plugin/releases/download/v$KIBANA_VERSION/malice-$KIBANA_VERSION.zip
+  https://github.com/maliceio/malice-kibana-plugin/releases/download/v$VERSION/malice-$VERSION.zip
 
 COPY docker-entrypoint.sh /
 

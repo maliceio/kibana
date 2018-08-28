@@ -2,13 +2,13 @@ REPO=maliceio/kibana
 ORG=malice
 NAME=kibana
 # build info
-BUILD ?=$(shell cat LATEST)
-LATEST ?=$(shell cat LATEST)
+LATEST?=$(shell cat LATEST)
+BUILD?=$(LATEST)
+BUILDS=$(LATEST) 6.3 5.6
 
 
 all: update build size test
 
-BUILDS=6.3 5.6
 .PHONY: update
 update:
 	$(foreach build,$(BUILDS),NAME=$(NAME) BUILD=$(build) $(MAKE) dockerfile;)
