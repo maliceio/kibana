@@ -35,7 +35,7 @@ fi
 
 # Run as user "kibana" if the command is "kibana"
 if [ "$1" = 'kibana' -a "$(id -u)" = '0' ]; then
-	set -- su-exec kibana "$@" "${kb_opts[@]}"
+	set -- su-exec kibana "$@" --cpu.cgroup.path.override=/ --cpuacct.cgroup.path.override=/ "${kb_opts[@]}"
 fi
 
 exec "$@"

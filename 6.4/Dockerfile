@@ -4,15 +4,15 @@ LABEL maintainer "https://github.com/blacktop"
 
 ENV VERSION 6.4.0
 ENV DOWNLOAD_URL https://artifacts.elastic.co/downloads/kibana
-ENV TARBAL "${DOWNLOAD_URL}/kibana-oss-${VERSION}-linux-x86_64.tar.gz"
-ENV TARBALL_ASC "${DOWNLOAD_URL}/kibana-oss-${VERSION}-linux-x86_64.tar.gz.asc"
-ENV TARBALL_SHA "eec78bb1935fdc126f7c69ea08c0997abc74f435f5ca24aa6fa370ad201dd1ebe9ab1d177f64ec66652a3c9c0dd3f13a8fa7866697d3f201f8bc124c051ebeba"
+ENV TARBAL "${DOWNLOAD_URL}/kibana-${VERSION}-linux-x86_64.tar.gz"
+ENV TARBALL_ASC "${DOWNLOAD_URL}/kibana-${VERSION}-linux-x86_64.tar.gz.asc"
+ENV TARBALL_SHA "ae0f6ede637bf373e44eb5711b5a07ce726bb72009d792c8e9a16d7eb32b2361cdda556a19c3f5fd50207320e86950217cf5e9a1a06607004d4b7f30d3dbb344"
 ENV GPG_KEY "46095ACC8548582C1A2699A9D27D666CD88E42B4"
 
 ENV PATH /usr/share/kibana/bin:$PATH
 
 RUN apk add --no-cache bash nodejs su-exec
-RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
+RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl fontconfig freetype \
   && set -ex \
   && cd /tmp \
   && echo "===> Install Kibana..." \
@@ -33,12 +33,6 @@ RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
   && ls -lah \
   && mv kibana-$VERSION-linux-x86_64 /usr/share/kibana \
   && adduser -DH -s /sbin/nologin kibana \
-  # the default "server.host" is "localhost" in 5+
-  && sed -ri "s!^(\#\s*)?(server\.host:).*!\2 '0.0.0.0'!" /usr/share/kibana/config/kibana.yml \
-  && grep -q "^server\.host: '0.0.0.0'\$" /usr/share/kibana/config/kibana.yml \
-  # ensure the default configuration is useful when using --link
-  && sed -ri "s!^(\#\s*)?(elasticsearch\.url:).*!\2 'http://elasticsearch:9200'!" /usr/share/kibana/config/kibana.yml \
-  && grep -q "^elasticsearch\.url: 'http://elasticsearch:9200'\$" /usr/share/kibana/config/kibana.yml \
   # usr alpine nodejs and not bundled version
   && bundled='NODE="${DIR}/node/bin/node"' \
   && apline_node='NODE="/usr/bin/node"' \
@@ -53,11 +47,12 @@ RUN echo "===> Install Kibana Plugin..." \
   && kibana-plugin install \
   https://github.com/maliceio/malice-kibana-plugin/releases/download/v$VERSION/malice-$VERSION.zip
 
-COPY docker-entrypoint.sh /
+COPY --chown=kibana:kibana config/kibana.yml /usr/share/kibana/config/kibana.yml
+COPY entrypoint.sh /
 
 WORKDIR /usr/share/kibana
 
 EXPOSE 5601
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["kibana"]
