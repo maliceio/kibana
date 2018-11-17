@@ -28,6 +28,7 @@ jobs:
             cd $(cat LATEST)
             docker version
             docker build --cache-from=app -t app .
+          no_output_timeout: 30m
       - run:
           name: Get Docker image size
           command: |
