@@ -44,7 +44,7 @@ RUN apk add --no-cache -t .build-deps wget ca-certificates gnupg openssl \
   && apk del --purge .build-deps
 
 RUN echo "===> Install Kibana Plugin..." \
-  && kibana-plugin install \
+  && NODE_OPTIONS="--max-old-space-size=4096" kibana-plugin install \
   https://github.com/maliceio/malice-kibana-plugin/releases/download/v$VERSION/malice-$VERSION.zip
 
 COPY --chown=kibana:kibana config/kibana.yml /usr/share/kibana/config/kibana.yml
