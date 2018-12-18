@@ -1,4 +1,4 @@
-FROM node:8.11.4-alpine
+FROM node:8.14-alpine
 
 LABEL maintainer "https://github.com/blacktop"
 
