@@ -1,9 +1,9 @@
-FROM blacktop/elasticsearch:x-pack
+FROM blacktop/kibana:6.6.0
 
 LABEL maintainer "https://github.com/maliceio"
 
 ENV VERSION 6.6.0
 
 RUN echo "===> Install Kibana Plugin..." \
-  && NODE_OPTIONS="--max-old-space-size=4096" kibana-plugin install \
+  && kibana-plugin install \
   https://github.com/maliceio/malice-kibana-plugin/releases/download/v$VERSION/malice-$VERSION.zip
