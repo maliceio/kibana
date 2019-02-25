@@ -2,7 +2,7 @@ FROM blacktop/elasticsearch:x-pack
 
 LABEL maintainer "https://github.com/maliceio"
 
-ENV VERSION 6.6.0
+ENV VERSION 6.6.1
 
 RUN echo "===> Install Kibana Plugin..." \
   && NODE_OPTIONS="--max-old-space-size=4096" kibana-plugin install \
