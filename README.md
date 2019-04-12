@@ -2,7 +2,7 @@
 
 # malice-kibana
 
-[![CircleCI](https://circleci.com/gh/maliceio/kibana.png?style=shield)](https://circleci.com/gh/maliceio/kibana) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Docker Stars](https://img.shields.io/docker/stars/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Pulls](https://img.shields.io/docker/pulls/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Image](https://img.shields.io/badge/docker%20image-268MB-blue.svg)](https://hub.docker.com/r/malice/kibana/)
+[![CircleCI](https://circleci.com/gh/maliceio/kibana.png?style=shield)](https://circleci.com/gh/maliceio/kibana) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org) [![Docker Stars](https://img.shields.io/docker/stars/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Pulls](https://img.shields.io/docker/pulls/malice/kibana.svg)](https://hub.docker.com/r/malice/kibana/) [![Docker Image](https://img.shields.io/badge/docker%20image-261MB-blue.svg)](https://hub.docker.com/r/malice/kibana/)
 
 > Malice's Custom [Kibana](https://www.elastic.co/products/kibana) Docker Image
 
@@ -12,13 +12,14 @@
 
 ## Dependencies
 
-- [alpine:3.8](https://hub.docker.com/_/alpine/)
+- [alpine:3.9](https://hub.docker.com/_/alpine/)
 
 ## Image Tags
 
 ```bash
 REPOSITORY        TAG                 SIZE
-malice/kibana     latest              268MB
+malice/kibana     latest              261MB
+malice/kibana     7.0                 261MB
 malice/kibana     6.6                 268MB
 malice/kibana     6.5                 286MB
 malice/kibana     6.4                 266MB
